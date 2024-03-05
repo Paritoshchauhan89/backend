@@ -1,7 +1,4 @@
 import bcrypt from 'bcrypt'
-import passport from 'passport';
-import JWT from 'jsonwebtoken';
-import User from '../models/userModell';
 
 
 export const hashPassword = async(password)=>{
