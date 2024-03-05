@@ -19,12 +19,11 @@ const userSchema = new mongoose.Schema({
     },
     googleId: {
         type: String,
-        required: true,
         unique: true
     },
     role: {
         type: String,
-        enum: ['author', 'admin', 'superadmin'], // Specify allowed values using an array
+        enum: ['author', 'admin' , 'editor' , 'reviewer' , 'quality' , 'formatting'], // Specify allowed values using an array
         default: 'author' // Default role value
     }
 }, { timestamps: true });
