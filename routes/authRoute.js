@@ -1,9 +1,11 @@
 import express from 'express'
 import { registerController, logincontroller,getAllAccounts,getaccountByIdController,updateAccountController, deleteAccountController } from '../controllers/authController.js'
-import { requireSignIn, isUser , isAdmin, isManager} from '../middlewares/authMiddleware.js'
+import { requireSignIn, isAuthor , isAdmin,isEditor, isReviewer, isQuality, isFormatting } from '../middlewares/authMiddleware.js'
 import passport from 'passport';
+
 // router object
 const router = express.Router()
+
 
 // routing
 
@@ -20,21 +22,26 @@ router.delete('/delete-account/:id', deleteAccountController);
 // Route for initiating the Google OAuth authentication
 router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 
-// Route for handling the Google OAuth callback
 router.get('/google/callback', passport.authenticate('google', { failureRedirect: '/' }), (req, res) => {
   // Successful authentication
   // Redirect to different pages based on user's role
-  if (req.user.role === 0) { // Assuming 0 represents a regular user role
-    res.redirect('/user-dashboard');
-  } else if (req.user.role === 1) { // Assuming 1 represents an admin role
+  if (req.user.role === 'author') {
+    res.redirect('/author-dashboard');
+  } else if (req.user.role === 'admin') {
     res.redirect('/admin-dashboard');
-  }else if (req.user.role === 2) { // Assuming 2 represents an manager role
+  } else if (req.user.role === 'manager') {
     res.redirect('/manager-dashboard');
-  } else {
-    // Handle other roles or unknown roles
-    res.redirect('/dashboard'); // Default redirect to dashboard
-  }
+  } else if (req.user.role === 'editor') {
+    res.redirect('/editor-dashboard');
+  } else if (req.user.role === 'reviewer') {
+    res.redirect('/reviewer-dashboard');
+  } else if (req.user.role === 'quality') {
+    res.redirect('/quality-dashboard');
+  } else if (req.user.role === 'formatting') {
+    res.redirect('/formatting-dashboard');
+  } 
 });
+
 
 
 // Route for logging out
@@ -45,14 +52,10 @@ router.get('/logout', (req, res) => {
 
 
 
-// protected user route auth
-// router.get('/user-auth', requireSignIn, (req, res) => {
-//     res.setHeader('Cache-Control', 'no-store');
-//     res.status(200).send({ ok: true });
-// });
+
 
 // protected User route auth
-router.get('/user-auth',requireSignIn, isUser,(req,res)=>{
+router.get('/author-auth',requireSignIn, isAuthor,(req,res)=>{
     res.status(200).send({ok:true});
 })
 // protected Admin route auth
@@ -60,10 +63,25 @@ router.get('/admin-auth',requireSignIn, isAdmin,(req,res)=>{
     res.status(200).send({ok:true});
 })
 
-// protected Manager route auth
-router.get('/manager-auth',requireSignIn, isManager,(req,res)=>{
-    res.status(200).send({ok:true});
-})
+// protected Editor route auth
+router.get('/editor-auth', requireSignIn, isEditor, (req, res) => {
+  res.status(200).send({ ok: true });
+});
+
+// protected Reviewer route auth
+router.get('/reviewer-auth', requireSignIn, isReviewer, (req, res) => {
+  res.status(200).send({ ok: true });
+});
+
+// protected Quality route auth
+router.get('/quality-auth', requireSignIn, isQuality, (req, res) => {
+  res.status(200).send({ ok: true });
+});
+
+// protected Formatting route auth
+router.get('/formatting-auth', requireSignIn, isFormatting, (req, res) => {
+  res.status(200).send({ ok: true });
+});
 
 
 export default router

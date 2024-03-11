@@ -9,6 +9,7 @@ import Auth from './routes/authRoute.js'
 import passport from 'passport';
 import session from 'express-session';
 import passportConfig from './config/passport.js';
+import journal from './routes/journalRoute.js';
 
 // configure env
 dotenv.config();
@@ -44,6 +45,7 @@ app.use(session({
 
 // routes
 app.use("/api/v1/auth",Auth);
+app.use("/api/v1/journal",journal);
 
 
 

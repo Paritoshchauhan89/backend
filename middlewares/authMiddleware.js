@@ -15,10 +15,10 @@ export const requireSignIn = async (req, res, next) => {
 };
 
 //admin acceess
-export const isUser = async (req, res, next) => {
+export const isAuthor = async (req, res, next) => {
   try {
     const user = await userModel.findById(req.user._id);
-    if (user.role !== 0) {
+    if (user.role !== 'author') {
       return res.status(401).send({
         success: false,
         message: "UnAuthorized Access",
@@ -39,7 +39,7 @@ export const isUser = async (req, res, next) => {
 export const isAdmin = async (req, res, next) => {
   try {
     const user = await userModel.findById(req.user._id);
-    if (user.role !== 1) {
+    if (user.role !== 'admin') {
       return res.status(401).send({
         success: false,
         message: "UnAuthorized Access",
@@ -56,13 +56,14 @@ export const isAdmin = async (req, res, next) => {
     });
   }
 };
-export const isManager = async (req, res, next) => {
+// Editor access
+export const isEditor = async (req, res, next) => {
   try {
     const user = await userModel.findById(req.user._id);
-    if (user.role !== 2) {
+    if (user.role !== 'editor') {
       return res.status(401).send({
         success: false,
-        message: "UnAuthorized Access",
+        message: "Unauthorized Access",
       });
     } else {
       next();
@@ -72,7 +73,74 @@ export const isManager = async (req, res, next) => {
     res.status(401).send({
       success: false,
       error,
-      message: "Error in Manager middelware",
+      message: "Error in editor middleware",
     });
   }
 };
+
+// Reviewer access
+export const isReviewer = async (req, res, next) => {
+  try {
+    const user = await userModel.findById(req.user._id);
+    if (user.role !== 'reviewer') {
+      return res.status(401).send({
+        success: false,
+        message: "Unauthorized Access",
+      });
+    } else {
+      next();
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(401).send({
+      success: false,
+      error,
+      message: "Error in reviewer middleware",
+    });
+  }
+};
+
+// Quality access
+export const isQuality = async (req, res, next) => {
+  try {
+    const user = await userModel.findById(req.user._id);
+    if (user.role !== 'quality') {
+      return res.status(401).send({
+        success: false,
+        message: "Unauthorized Access",
+      });
+    } else {
+      next();
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(401).send({
+      success: false,
+      error,
+      message: "Error in quality middleware",
+    });
+  }
+};
+
+// Formatting access
+export const isFormatting = async (req, res, next) => {
+  try {
+    const user = await userModel.findById(req.user._id);
+    if (user.role !== 'formatting') {
+      return res.status(401).send({
+        success: false,
+        message: "Unauthorized Access",
+      });
+    } else {
+      next();
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(401).send({
+      success: false,
+      error,
+      message: "Error in formatting middleware",
+    });
+  }
+};
+
