@@ -4,8 +4,7 @@ import Journal from '../models/journalModel.js';
 export const getAllJournals = async (req, res) => {
     try {
       const journals = await Journal.find();
-      const totalCount = await Journal.countDocuments();
-      res.json({ totalCount, journals });
+      res.json({journals });
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
