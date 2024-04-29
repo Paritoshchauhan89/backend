@@ -4,7 +4,7 @@ import * as journalController from '../controllers/journalController.js';
 
 const router = express.Router();
 
-router.get('/', journalController.getAllJournals);
+router.get('/all-journals', journalController.getAllJournals);
 router.post('/', journalController.createJournal);
 router.get('/:id', journalController.getJournalById);
 router.put('/:id', journalController.updateJournal);
