@@ -1,14 +1,16 @@
 import Journal from '../models/journalModel.js';
 
 // Get all journals
+
 export const getAllJournals = async (req, res) => {
     try {
-      const journals = await Journal.find();
-        response.status(201).json(journals);
+        const journals = await Journal.find();
+        res.status(200).json(journals); 
     } catch (error) {
-      res.status(500).json({ message: error.message });
+        res.status(500).json({ message: error.message });
     }
-  };
+};
+
   
 
 // Get a single journal by ID
